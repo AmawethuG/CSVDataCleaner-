@@ -1,0 +1,59 @@
+CSV CLEANING REPORT
+===================
+
+Original rows: 25
+Rows after removing duplicates: 25
+Duplicates removed: 0
+
+Missing Values BEFORE Cleaning:
+case_id                   0
+case_name                 0
+court_level               0
+court_name                0
+province                  0
+city                      0
+filing_date               0
+decision_date             0
+case_duration_days        0
+case_type                 0
+charge_or_claim           0
+verdict                   0
+fine_amount_zar           0
+settlement_amount_zar     0
+sentence_years            0
+appealed                  0
+appeal_result            12
+dtype: int64
+
+Missing Values AFTER Cleaning:
+case_id                   0
+case_name                25
+court_level              25
+court_name               25
+province                 25
+city                     25
+filing_date              25
+decision_date            25
+case_duration_days        0
+case_type                25
+charge_or_claim          25
+verdict                  25
+fine_amount_zar           0
+settlement_amount_zar     0
+sentence_years            0
+appealed                 25
+appeal_result            25
+dtype: int64
+
+Summary Statistics:
+           case_id  case_name  court_level  court_name  province  ...  fine_amount_zar  settlement_amount_zar  sentence_years  appealed  appeal_result
+count    25.000000        0.0          0.0         0.0       0.0  ...        25.000000              25.000000       25.000000       0.0            0.0
+mean   2013.000000        NaN          NaN         NaN       NaN  ...      3720.000000           43600.000000        3.280000       NaN            NaN
+std       7.359801        NaN          NaN         NaN       NaN  ...      6920.801977           80680.956035        4.962526       NaN            NaN
+min    2001.000000        NaN          NaN         NaN       NaN  ...         0.000000               0.000000        0.000000       NaN            NaN
+25%    2007.000000        NaN          NaN         NaN       NaN  ...         0.000000               0.000000        0.000000       NaN            NaN
+50%    2013.000000        NaN          NaN         NaN       NaN  ...         0.000000               0.000000        1.000000       NaN            NaN
+75%    2019.000000        NaN          NaN         NaN       NaN  ...      3500.000000           70000.000000        5.000000       NaN            NaN
+max    2025.000000        NaN          NaN         NaN       NaN  ...     25000.000000          350000.000000       20.000000       NaN            NaN
+
+[8 rows x 17 columns]
