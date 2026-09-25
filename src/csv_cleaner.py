@@ -8,7 +8,7 @@ def clean_data(input_file, output_file):
     df = df.drop_duplicates()
 
     # Remove extra spaces from text values
-    for column in df.select_dtypes(include="object"):
+    for column in df.select_dtypes(include="str"):
         df[column] = df[column].str.strip()
 
     # Convert known numeric columns
@@ -32,8 +32,8 @@ def clean_data(input_file, output_file):
     print(f"Cleaned {len(df)} records.")
     print(f"Saved to {output_file}")
 
-
-clean_data(
-    "data/raw/cases.csv",
-    "data/processed/cases_clean.csv"
-)
+if __name__ == "__main__":
+    clean_data(
+        "data/raw/cases.csv",
+        "data/processed/cases_clean.csv"
+    )
