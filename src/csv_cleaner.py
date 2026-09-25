@@ -27,6 +27,9 @@ def clean_data(input_file, output_file):
     df["filing_date"] = pd.to_datetime(df["filing_date"], errors="coerce")
     df["decision_date"] = pd.to_datetime(df["decision_date"], errors="coerce")
 
+    # Sort by filing date in ascending order
+    df = df.sort_values("filing_date")
+
     df.to_csv(output_file, index=False)
 
     print(f"Cleaned {len(df)} records.")

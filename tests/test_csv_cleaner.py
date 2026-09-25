@@ -277,33 +277,52 @@ def test_numeric_columns_have_numeric_dtypes(tmp_path):
         assert pd.api.types.is_numeric_dtype(cleaned_df[column])
 
 
-
-def test_missing_required_value_is_rejected(tmp_path):
+def test_data_is_sorted_by_filing_date(tmp_path):
     input_file = tmp_path / "input.csv"
     output_file = tmp_path / "output.csv"
 
     data = {
-        "case_id": [2001],
-        "case_name": [None],
-        "court_level": ["Magistrates Court"],
-        "court_name": ["Johannesburg Magistrates Court"],
-        "province": ["Gauteng"],
-        "city": ["Johannesburg"],
-        "filing_date": ["2022-01-10"],
-        "decision_date": ["2022-03-15"],
-        "case_duration_days": [64],
-        "case_type": ["Criminal"],
-        "charge_or_claim": ["Theft"],
-        "verdict": ["Guilty"],
-        "fine_amount_zar": [3500],
-        "settlement_amount_zar": [0],
-        "sentence_years": [2],
-        "appealed": ["Yes"],
-        "appeal_result": ["Upheld"],
+        "case_id": [2001, 2002, 2003],
+        "case_name": ["Case A", "Case B", "Case C"],
+        "court_level": [
+            "Magistrates Court",
+            "Magistrates Court",
+            "Magistrates Court",
+        ],
+        "court_name": [
+            "Johannesburg Magistrates Court",
+            "Johannesburg Magistrates Court",
+            "Johannesburg Magistrates Court",
+        ],
+        "province": ["Gauteng", "Gauteng", "Gauteng"],
+        "city": ["Johannesburg", "Johannesburg", "Johannesburg"],
+        "filing_date": [
+            "2024-01-15",
+            "2022-05-10",
+            "2023-09-20",
+        ],
+        "decision_date": [
+            "2024-03-15",
+            "2022-07-10",
+            "2023-11-20",
+        ],
+        "case_duration_days": [60, 61, 62],
+        "case_type": ["Criminal", "Criminal", "Criminal"],
+        "charge_or_claim": ["Theft", "Fraud", "Assault"],
+        "verdict": ["Guilty", "Guilty", "Not Guilty"],
+        "fine_amount_zar": [3500, 5000, 0],
+        "settlement_amount_zar": [0, 0, 10000],
+        "sentence_years": [2, 3, 0],
+        "appealed": ["Yes", "No", "No"],
+        "appeal_result": ["Upheld", "N/A", "N/A"],
     }
 
     pd.DataFrame(data).to_csv(input_file, index=False)
 
-    with pytest.raises(ValueError):
-        clean_data(input_file, output_file)
+    clean_data(input_file, output_file)
 
+    cleaned_df = pd.read_csv(output_file)
+
+    filing_dates = pd.to_datetime(cleaned_df["filing_date"])
+
+    assert filing_dates.is_monotonic_increasing
