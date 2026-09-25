@@ -73,3 +73,49 @@ def test_whitespace_is_removed_from_text_columns(tmp_path):
     assert cleaned_df.loc[0, "province"] == "Gauteng"
     assert cleaned_df.loc[0, "city"] == "Johannesburg"
     assert cleaned_df.loc[0, "verdict"] == "Guilty"
+
+
+def test_dates_are_converted_to_valid_dates(tmp_path):
+    input_file = tmp_path / "input.csv"
+    output_file = tmp_path / "output.csv"
+
+    data = {
+        "case_id": [2001],
+        "case_name": ["S v Mokoena"],
+        "court_level": ["Magistrates Court"],
+        "court_name": ["Johannesburg Magistrates Court"],
+        "province": ["Gauteng"],
+        "city": ["Johannesburg"],
+        "filing_date": ["2022-01-10 14:30:00"],
+        "decision_date": ["2022-03-15 09:45:00"],
+        "case_duration_days": [64],
+        "case_type": ["Criminal"],
+        "charge_or_claim": ["Theft"],
+        "verdict": ["Guilty"],
+        "fine_amount_zar": [3500],
+        "settlement_amount_zar": [0],
+        "sentence_years": [2],
+        "appealed": ["Yes"],
+        "appeal_result": ["Upheld"],
+    }
+
+    pd.DataFrame(data).to_csv(input_file, index=False)
+
+    clean_data(input_file, output_file)
+
+    cleaned_df = pd.read_csv(
+        output_file,
+        parse_dates=["filing_date", "decision_date"]
+    )
+
+    assert pd.api.types.is_datetime64_any_dtype(
+        cleaned_df["filing_date"]
+    )
+
+    assert pd.api.types.is_datetime64_any_dtype(
+        cleaned_df["decision_date"]
+    )
+
+    assert cleaned_df.loc[0, "filing_date"].date() == pd.Timestamp("2022-01-10").date()
+    assert cleaned_df.loc[0, "decision_date"].date() == pd.Timestamp("2022-03-15").date()
+
