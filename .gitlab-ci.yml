@@ -1,0 +1,31 @@
+image: python:3.13
+
+stages:
+  - test
+  - clean
+  - docker
+
+install_dependencies:
+  stage: test
+  script:
+    - pip install -r requirements.txt
+
+run_tests:
+  stage: test
+  script:
+    - pip install -r requirements.txt
+    - make test
+
+clean_data:
+  stage: clean
+  script:
+    - pip install -r requirements.txt
+    - make run
+
+build_docker_image:
+  stage: docker
+  image: docker:latest
+  services:
+    - docker:dind
+  script:
+    - docker build -t csv-data-cleaner .
