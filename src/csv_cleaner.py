@@ -8,7 +8,7 @@ def clean_data(input_file, output_file):
     df = df.drop_duplicates()
 
     # Remove extra spaces from text values
-    for column in df.select_dtypes(include="str"):
+    for column in df.select_dtypes(include="object"):
         df[column] = df[column].str.strip()
 
     # Convert known numeric columns
