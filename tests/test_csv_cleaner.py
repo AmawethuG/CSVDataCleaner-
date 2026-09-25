@@ -188,5 +188,48 @@ def test_invalid_numeric_value_becomes_nan(tmp_path):
     assert pd.isna(cleaned_df.loc[0, "fine_amount_zar"])
     assert cleaned_df.loc[0, "case_duration_days"] == 64
 
+def test_required_columns_have_no_missing_values(tmp_path):
+    input_file = tmp_path / "input.csv"
+    output_file = tmp_path / "output.csv"
 
+    data = {
+        "case_id": [2001],
+        "case_name": ["S v Mokoena"],
+        "court_level": ["Magistrates Court"],
+        "court_name": ["Johannesburg Magistrates Court"],
+        "province": ["Gauteng"],
+        "city": ["Johannesburg"],
+        "filing_date": ["2022-01-10"],
+        "decision_date": ["2022-03-15"],
+        "case_duration_days": [64],
+        "case_type": ["Criminal"],
+        "charge_or_claim": ["Theft"],
+        "verdict": ["Guilty"],
+        "fine_amount_zar": [3500],
+        "settlement_amount_zar": [0],
+        "sentence_years": [2],
+        "appealed": ["Yes"],
+        "appeal_result": ["Upheld"],
+    }
+
+    pd.DataFrame(data).to_csv(input_file, index=False)
+
+    clean_data(input_file, output_file)
+
+    cleaned_df = pd.read_csv(output_file)
+
+    required_columns = [
+        "case_id",
+        "case_name",
+        "court_level",
+        "court_name",
+        "province",
+        "filing_date",
+        "decision_date",
+        "case_type",
+        "verdict",
+    ]
+
+    for column in required_columns:
+        assert cleaned_df[column].notna().all()
  
